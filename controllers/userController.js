@@ -6,7 +6,7 @@ const { hashPassword } = require('../utils/passwordUtils');
 exports.createUser = async (req, res) => {
   const { nome, email, cpf, senha } = req.body;
 
-  console.log('📥 Dados recebidos:', { nome, email, cpf, senha: '***' });
+  console.log('Dados recebidos:', { nome, email, cpf, senha: '***' });
 
   // Validações robustas
   if (!nome || !email || !cpf || !senha) {
@@ -28,12 +28,12 @@ exports.createUser = async (req, res) => {
   }
 
   try {
-    console.log('🔧 Iniciando cadastro no Firebase...');
+    console.log('Iniciando cadastro no Firebase...');
     
     const db = admin.firestore();
     const userRef = db.collection('usuarios');
     
-    console.log('🔍 Verificando duplicatas...');
+    console.log('Verificando duplicatas...');
     
     // Verificar duplicatas
     const [cpfExistente, emailExistente] = await Promise.all([
@@ -41,8 +41,8 @@ exports.createUser = async (req, res) => {
       userRef.where('email', '==', email.toLowerCase()).get()
     ]);
 
-    console.log(`📊 CPF existe? ${!cpfExistente.empty}`);
-    console.log(`📊 Email existe? ${!emailExistente.empty}`);
+    console.log(`CPF existe? ${!cpfExistente.empty}`);
+    console.log(`Email existe? ${!emailExistente.empty}`);
 
     if (!cpfExistente.empty) {
       return res.status(409).json({ mensagem: 'CPF já cadastrado.' });
@@ -52,14 +52,14 @@ exports.createUser = async (req, res) => {
       return res.status(409).json({ mensagem: 'E-mail já cadastrado.' });
     }
 
-    console.log('🔐 Gerando hash da senha...');
+    console.log('Gerando hash da senha...');
     
-    // Hash da senha
+    // ---------- Hash da senha ----------
     const senhaHash = await hashPassword(senha);
 
-    console.log('💾 Salvando usuário no Firestore...');
+    console.log('Salvando usuário no Firestore...');
     
-    // Criar usuário
+    // ---------- Criar usuário ----------
     const userDoc = await userRef.add({
       nome: nome.trim(),
       email: email.toLowerCase().trim(),
@@ -68,7 +68,7 @@ exports.createUser = async (req, res) => {
       dataCriacao: new Date().toISOString()
     });
 
-    console.log('✅ Usuário criado com ID:', userDoc.id);
+    console.log('Usuário criado com ID:', userDoc.id);
 
     res.status(201).json({ 
       mensagem: 'Usuário cadastrado com sucesso.',
@@ -77,8 +77,8 @@ exports.createUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ ERRO DETALHADO:', error);
-    console.error('🔍 Stack trace:', error.stack);
+    console.error('ERRO DETALHADO:', error);
+    console.error('Stack trace:', error.stack);
     
     res.status(500).json({ 
       mensagem: 'Erro interno do servidor. Tente novamente.',

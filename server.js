@@ -1,19 +1,18 @@
-// server.js
 const express = require('express');
 const app = express();
 require('dotenv').config();
 const cors = require('cors');
 
-// Tratamento de erros não capturados
+// ---------- erros não capturados ----------
 process.on('uncaughtException', (error) => {
-  console.error('💥 ERRO NÃO CAPTURADO:', error);
-  console.error('📝 Stack:', error.stack);
+  console.error('ERRO NÃO CAPTURADO:', error);
+  console.error('Stack:', error.stack);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('💥 PROMISE REJEITADA não tratada:', reason);
-  console.error('📝 Na promise:', promise);
+  console.error('PROMISE REJEITADA não tratada:', reason);
+  console.error('Na promise:', promise);
 });
 
 app.use(cors());
