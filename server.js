@@ -3,46 +3,28 @@ const app = express();
 require('dotenv').config();
 const cors = require('cors');
 
-// ---------- erros não capturados ----------
-process.on('uncaughtException', (error) => {
-  console.error('ERRO NÃO CAPTURADO:', error);
-  console.error('Stack:', error.stack);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('PROMISE REJEITADA não tratada:', reason);
-  console.error('Na promise:', promise);
-});
-
 app.use(cors());
 app.use(express.json());
 
-// Middleware de log
+const pool = require('./config/db');
 app.use((req, res, next) => {
-  console.log(`📥 ${req.method} ${req.url}`);
+  console.log(`${req.method} ${req.url}`);
   next();
 });
 
-// Rota de saúde
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+app.get('/health', async (req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ status: 'OK', db: 'PostgreSQL', timestamp: new Date().toISOString() });
+  } catch (err) {
+    res.status(500).json({ status: 'Erro de conexão com DB', erro: err.message });
+  }
 });
 
-// Importar e usar rotas
-try {
-  const userRoutes = require('./routes/userRoutes');
-  app.use('/api/users', userRoutes);
-  console.log('✅ Rotas carregadas com sucesso');
-} catch (error) {
-  console.error('❌ Erro ao carregar rotas:', error);
-}
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`🌐 Health check: http://localhost:${PORT}/health`);
-}).on('error', (err) => {
-  console.error('❌ Erro no servidor:', err);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
