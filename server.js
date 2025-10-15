@@ -2,15 +2,10 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const cors = require('cors');
+const pool = require('./config/db');
 
 app.use(cors());
 app.use(express.json());
-
-const pool = require('./config/db');
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-});
 
 app.get('/health', async (req, res) => {
   try {
@@ -22,9 +17,10 @@ app.get('/health', async (req, res) => {
 });
 
 const userRoutes = require('./routes/userRoutes');
+const linhaRoutes = require('./routes/linhaRoutes');
+
 app.use('/api/users', userRoutes);
+app.use('/api/linhas', linhaRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
