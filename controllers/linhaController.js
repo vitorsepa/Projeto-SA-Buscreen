@@ -1,4 +1,3 @@
-// controllers/linhaController.js
 const pool = require('../config/db');
 
 exports.createLinha = async (req, res) => {
@@ -30,5 +29,20 @@ exports.createLinha = async (req, res) => {
   } catch (error) {
     console.error('Erro ao cadastrar linha:', error);
     res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+  }
+};
+
+exports.getLinhas = async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM linhas ORDER BY id ASC');
+
+    res.status(200).json({
+      total: result.rows.length,
+      linhas: result.rows
+    });
+
+  } catch (error) {
+    console.error('Erro ao buscar linhas:', error);
+    res.status(500).json({ mensagem: 'Erro ao buscar linhas.' });
   }
 };

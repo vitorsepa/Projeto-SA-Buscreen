@@ -3,5 +3,6 @@ const router = express.Router();
 const linhaController = require('../controllers/linhaController');
 
 router.post('/cadastro', linhaController.createLinha);
+router.get('/', linhaController.getLinhas);
 
 module.exports = router;
