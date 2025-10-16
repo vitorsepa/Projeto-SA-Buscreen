@@ -46,3 +46,20 @@ exports.getLinhas = async (req, res) => {
     res.status(500).json({ mensagem: 'Erro ao buscar linhas.' });
   }
 };
+
+exports.getLinhaById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query('SELECT * FROM linhas WHERE id = $1', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ mensagem: 'Linha não encontrada.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Erro ao buscar linha:', error);
+    res.status(500).json({ mensagem: 'Erro ao buscar linha.' });
+  }
+};
