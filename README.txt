@@ -1,4 +1,6 @@
 BUSCREEN BACKEND
+Grupo: Vítor C, Vicenzo P e João P
+
 Backend desenvolvido em **Node.js + Express + PostgreSQL** para o sistema **Buscreen**, que gerencia usuários e linhas de ônibus.  
 O projeto inclui cadastro e login de usuários, além do gerenciamento de linhas (criação e consulta).
 
