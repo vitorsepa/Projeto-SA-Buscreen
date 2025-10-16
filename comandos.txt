@@ -1,0 +1,24 @@
+CADASTRO USUARIO
+{
+  "nome": "Lucio",
+  "email": "mauro@gmail.com",
+  "senha": "123456"
+}
+
+CADASTRO ONIBUS
+{
+  "companhia": "Biguaçu",
+  "nome_linha": "Diretão",
+  "lotacao_maxima": 50,
+  "horario": "06:00 - 22:00"
+}
+
+
+RESGATAR TODAS AS LINHAS
+http://localhost:3000/api/linhas
+
+PEGANDO LINHA POR ID 
+http://localhost:3000/api/linhas/2
+
+LOGIN
+http://localhost:3000/api/users/login?email=teste@gmail.com&senha=123456
