@@ -1,4 +1,5 @@
 CADASTRO USUARIO
+http://localhost:3000/api/users/cadastro
 {
   "nome": "Lucio",
   "email": "mauro@gmail.com",
@@ -6,6 +7,7 @@ CADASTRO USUARIO
 }
 
 CADASTRO ONIBUS
+http://localhost:3000/api/linhas/cadastro
 {
   "companhia": "Biguaçu",
   "nome_linha": "Diretão",
@@ -22,3 +24,5 @@ http://localhost:3000/api/linhas/2
 
 LOGIN
 http://localhost:3000/api/users/login?email=teste@gmail.com&senha=123456
+
+postgres://buscreen_user:buscreen123@localhost:5432/buscreen
