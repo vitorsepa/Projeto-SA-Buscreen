@@ -63,3 +63,25 @@ exports.getLinhaById = async (req, res) => {
     res.status(500).json({ mensagem: 'Erro ao buscar linha.' });
   }
 };
+
+exports.deleteLinha = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const checkResult = await pool.query('SELECT * FROM linhas WHERE id = $1', [id]);
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ mensagem: 'Linha não encontrada.' });
+    }
+
+    // Exclui a linha
+    await pool.query('DELETE FROM linhas WHERE id = $1', [id]);
+    
+    console.log(`Linha ${id} excluída com sucesso`);
+    res.status(200).json({ mensagem: 'Linha excluída com sucesso.' });
+
+  } catch (error) {
+    console.error('Erro ao excluir linha:', error);
+    res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+  }
+};
